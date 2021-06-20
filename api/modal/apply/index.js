@@ -1,39 +1,34 @@
 const mongoose = require('mongoose');
 
-const jobSchema = mongoose.Schema(
+const applySchema = mongoose.Schema(
   {
-    jobPosterId: {
+    applicantId: {
       type: String,
       required: true,
     },
-    title: {
+    jobId: {
+      type: String,
+      required: true,
+    },
+    name: {
       type: String,
       required: true,
       trim: true,
     },
-    description: {
+    contact: {
       type: String,
       required: true,
     },
-    deadline: {
+    email: {
       type: String,
       required: true,
     },
-    companyName: {
+    portfolioLink: {
       type: String,
-      required: true,
-    },
-    location: {
-      type: String,
-      required: true,
-    },
-    tag: {
-      type: String,
-      required: true,
     },
     status: {
       type: String,
-      enum: ['pending', 'publish'],
+      enum: ['pending', 'approved'],
       default: 'pending',
     },
   },
@@ -42,6 +37,6 @@ const jobSchema = mongoose.Schema(
   }
 );
 
-const Job = mongoose.model('job', jobSchema);
+const Apply = mongoose.model('apply', applySchema);
 
-module.exports = Job;
+module.exports = Apply;
