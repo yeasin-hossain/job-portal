@@ -19,8 +19,10 @@ module.exports.saveJob = async (req, res) => {
 
 // All jobs
 module.exports.getAllJobs = async (req, res) => {
+  const { limit } = req.params;
   try {
-    const jobs = await Job.find({});
+    // eslint-disable-next-line radix
+    const jobs = await Job.find({}).limit(parseInt(limit));
 
     if (!jobs) {
       return res.status(404).json({ message: 'No Jobs Available' });
