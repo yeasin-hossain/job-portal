@@ -19,7 +19,7 @@ module.exports.login = async (req, res) => {
       return res.status(200).json({ message: 'Email Or Password Not Match' });
     }
 
-    const { name, role, createdAt, companyName, paid } = singUser;
+    const { name, role, createdAt, companyName, paid, _id } = singUser;
     const payload = {
       email,
       name,
@@ -27,6 +27,7 @@ module.exports.login = async (req, res) => {
       createdAt,
       companyName,
       paid,
+      id: _id,
     };
 
     // Create Jwt Token
@@ -52,7 +53,7 @@ module.exports.register = async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    const { email, name, role, createdAt, companyName, paid } = savedUser;
+    const { email, name, role, createdAt, companyName, paid, _id } = savedUser;
     const payload = {
       email,
       name,
@@ -60,6 +61,7 @@ module.exports.register = async (req, res) => {
       createdAt,
       companyName,
       paid,
+      id: _id,
     };
 
     // Create Jwt Token
@@ -68,6 +70,24 @@ module.exports.register = async (req, res) => {
     });
 
     res.status(200).send({ ...payload, token });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Internal Server Error' });
+  }
+};
+
+module.exports.updateUser = async (req, res) => {
+  const { userId } = req.params;
+  const user = req.body;
+  console.log(user);
+  try {
+    const updateUser = await User.findOneAndUpdate({ _id: userId }, user);
+
+    if (updateUser) {
+      const updatedUser = await User.findById(userId);
+      // console.log(updatedUser);
+      res.status(200).json(updatedUser);
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' });
