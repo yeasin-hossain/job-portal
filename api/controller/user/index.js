@@ -7,8 +7,10 @@ module.exports.login = async (req, res) => {
   try {
     const userCredentials = req.body;
     const { email, password } = userCredentials;
+
     // Get User From Server
     const singUser = await User.findOne({ email });
+
     if (!singUser) {
       return res.status(404).json({ message: 'User Not Found' });
     }
@@ -46,6 +48,7 @@ module.exports.register = async (req, res) => {
   try {
     const salt = genSaltSync(parseInt(process.env.SALT));
     const hashedPassword = await hash(req.body.password, salt);
+
     const newUser = new User({
       ...req.body,
       password: hashedPassword,
@@ -79,13 +82,14 @@ module.exports.register = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   const { userId } = req.params;
   const user = req.body;
+
   try {
     const updateUser = await User.findOneAndUpdate({ _id: userId }, user);
 
     if (updateUser) {
       const updatedUser = await User.findById(userId);
-      // console.log(updatedUser);
-      res.status(200).json(updatedUser);
+
+      return res.status(200).json(updatedUser);
     }
   } catch (error) {
     console.log(error);
@@ -100,6 +104,7 @@ module.exports.getAllUsers = async (req, res, next) => {
     if (!orders) {
       return res.status(404).json({ message: 'No User Available' });
     }
+
     res.status(200).json(orders);
   } catch (err) {
     next(err);

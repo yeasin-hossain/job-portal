@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const Job = require('../../modal/jobs');
 
+// save new job
 module.exports.saveJob = async (req, res) => {
   const jobInfo = req.body;
 
@@ -16,12 +17,32 @@ module.exports.saveJob = async (req, res) => {
   }
 };
 
+// All jobs
 module.exports.getAllJobs = async (req, res) => {
   try {
     const jobs = await Job.find({});
+
     if (!jobs) {
       return res.status(404).json({ message: 'No Jobs Available' });
     }
+
+    res.status(200).json(jobs);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+
+// jobs by user
+module.exports.jobsByUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const jobs = await Job.find({ jobPosterId: id });
+    if (!jobs) {
+      return res.status(404).json({ message: 'No Jobs Available' });
+    }
+
     res.status(200).json(jobs);
   } catch (err) {
     console.log(err);
@@ -33,6 +54,7 @@ module.exports.getAllJobs = async (req, res) => {
 module.exports.UpdateJob = async (req, res, next) => {
   const { id } = req.params;
   const jobInfo = req.body;
+
   try {
     const job = await Job.findById({ _id: id });
 
@@ -48,6 +70,8 @@ module.exports.UpdateJob = async (req, res, next) => {
     next(err);
   }
 };
+
+// single job
 module.exports.singleJob = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -61,13 +85,17 @@ module.exports.singleJob = async (req, res, next) => {
     next(err);
   }
 };
+
+// delete job
 module.exports.deleteJob = async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedJob = await Job.findByIdAndRemove(id);
+
     if (!deletedJob) {
       return res.status(200).json({ message: 'Sorry No Job Found' });
     }
+
     res.status(200).json(deletedJob);
   } catch (err) {
     next(err);

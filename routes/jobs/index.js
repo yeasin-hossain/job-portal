@@ -5,6 +5,7 @@ const {
   UpdateJob,
   singleJob,
   deleteJob,
+  jobsByUser,
 } = require('../../api/controller/jobs');
 const { jobValidator, jobValidationHandler } = require('../../middelwares/job');
 
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.get('/', getAllJobs);
 router.get('/:id', singleJob);
+router.get('/user/:id', jobsByUser);
 router.put('/:id', UpdateJob);
 router.post('/', jobValidator, jobValidationHandler, saveJob);
 router.delete('/:id', deleteJob);
