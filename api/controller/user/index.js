@@ -10,13 +10,13 @@ module.exports.login = async (req, res) => {
     // Get User From Server
     const singUser = await User.findOne({ email });
     if (!singUser) {
-      return res.status(200).json({ message: 'User Not Found' });
+      return res.status(404).json({ message: 'User Not Found' });
     }
 
     // validate password
     const validatePassword = await compare(password, singUser.password);
     if (!validatePassword) {
-      return res.status(200).json({ message: 'Email Or Password Not Match' });
+      return res.status(400).json({ message: 'Email Or Password Not Match' });
     }
 
     const { name, role, createdAt, companyName, paid, _id } = singUser;
@@ -79,7 +79,6 @@ module.exports.register = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   const { userId } = req.params;
   const user = req.body;
-  console.log(user);
   try {
     const updateUser = await User.findOneAndUpdate({ _id: userId }, user);
 
