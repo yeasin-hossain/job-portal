@@ -16,7 +16,7 @@
 
 #### update and delete route are projected
 ` user root route domain.com/user`
-\
+
 #### protected
 ` jobs root route domain.com/jobs`
 

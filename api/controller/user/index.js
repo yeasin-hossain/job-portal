@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable radix */
 const { ReasonPhrases } = require('http-status-codes');
 
