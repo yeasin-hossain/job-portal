@@ -1,6 +1,7 @@
 const express = require('express');
 
 const { login, register, updateUser, getAllUsers } = require('../../api/controller/user');
+const Auth = require('../../middelwares/auth');
 const {
   loginValidator,
   addUserValidationHandler,
@@ -9,8 +10,8 @@ const {
 
 const router = express.Router();
 
-router.get('/', getAllUsers);
-router.put('/:userId', updateUser);
+router.get('/', Auth, getAllUsers);
+router.put('/:userId', Auth, updateUser);
 router.post('/login', loginValidator, addUserValidationHandler, login);
 router.post('/resister', registerValidator, addUserValidationHandler, register);
 

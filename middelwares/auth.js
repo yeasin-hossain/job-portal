@@ -21,10 +21,10 @@ const Auth = (req, res, next) => {
         // Set currentUser Data
         req.currentUser = Object.freeze({
           id: tokenData.id,
-          fullName: tokenData.FullName,
-          email: tokenData.Email,
-          ban: tokenData.ban,
+          name: tokenData.name,
+          email: tokenData.email,
           role: tokenData.role,
+          ban: tokenData.ban,
         });
         next();
       } else {

@@ -27,6 +27,10 @@ const peopleSchema = mongoose.Schema(
     paid: {
       type: Boolean,
     },
+    ban: {
+      type: Boolean,
+      default: false,
+    },
     role: {
       type: String,
       enum: ['admin', 'jobSeeker', 'jobPoster'],
