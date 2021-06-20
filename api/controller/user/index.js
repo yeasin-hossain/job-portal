@@ -35,7 +35,7 @@ module.exports.login = async (req, res) => {
       expiresIn: '1day',
     });
 
-    res.status(200).json({ ...payload, token });
+    return res.status(200).json({ ...payload, token });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' });
@@ -91,5 +91,18 @@ module.exports.updateUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' });
+  }
+};
+
+// eslint-disable-next-line consistent-return
+module.exports.getAllUsers = async (req, res, next) => {
+  try {
+    const orders = await User.find({});
+    if (!orders) {
+      return res.status(404).json({ message: 'No User Available' });
+    }
+    res.status(200).json(orders);
+  } catch (err) {
+    next(err);
   }
 };

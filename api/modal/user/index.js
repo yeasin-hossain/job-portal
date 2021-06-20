@@ -26,7 +26,6 @@ const peopleSchema = mongoose.Schema(
     },
     paid: {
       type: Boolean,
-      default: false,
     },
     role: {
       type: String,
