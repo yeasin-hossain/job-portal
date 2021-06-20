@@ -1,14 +1,50 @@
-const bcrypt = require('bcrypt');
+/* eslint-disable radix */
+const { genSaltSync, hash, compare } = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../../modal/user');
 
 module.exports.login = async (req, res) => {
-  res.status(200).json({ message: 'welcome to login route' });
+  try {
+    const userCredentials = req.body;
+    const { email, password } = userCredentials;
+    // Get User From Server
+    const singUser = await User.findOne({ email });
+    if (!singUser) {
+      return res.status(200).json({ message: 'User Not Found' });
+    }
+
+    // validate password
+    const validatePassword = await compare(password, singUser.password);
+    if (!validatePassword) {
+      return res.status(200).json({ message: 'Email Or Password Not Match' });
+    }
+
+    const { name, role, createdAt, companyName, paid } = singUser;
+    const payload = {
+      email,
+      name,
+      role,
+      createdAt,
+      companyName,
+      paid,
+    };
+
+    // Create Jwt Token
+    const token = await jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '1day',
+    });
+
+    res.status(200).json({ ...payload, token });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Internal Server Error' });
+  }
 };
 
 module.exports.register = async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const salt = genSaltSync(parseInt(process.env.SALT));
+    const hashedPassword = await hash(req.body.password, salt);
     const newUser = new User({
       ...req.body,
       password: hashedPassword,
