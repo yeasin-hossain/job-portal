@@ -1,4 +1,6 @@
 /* eslint-disable radix */
+const { ReasonPhrases } = require('http-status-codes');
+
 const { genSaltSync, hash, compare } = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../../modal/user');
