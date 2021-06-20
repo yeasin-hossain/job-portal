@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable radix */
-const { ReasonPhrases } = require('http-status-codes');
+const { getReasonPhrase } = require('http-status-codes');
 
 const { genSaltSync, hash, compare } = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -21,7 +21,13 @@ module.exports.login = async (req, res) => {
     // validate password
     const validatePassword = await compare(password, singUser.password);
     if (!validatePassword) {
-      return res.status(400).json({ message: 'Email Or Password Not Match' });
+      return res.status(404).json({
+        message: 'Email Or Password Not Match',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
     }
 
     const { name, role, createdAt, companyName, paid, _id } = singUser;
@@ -39,8 +45,13 @@ module.exports.login = async (req, res) => {
     const token = await jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '1day',
     });
-
-    return res.status(200).json({ ...payload, token });
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: { ...payload, token },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' });
@@ -74,8 +85,13 @@ module.exports.register = async (req, res) => {
     const token = await jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '1day',
     });
-
-    res.status(200).send({ ...payload, token });
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: { ...payload, token },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' });
@@ -91,8 +107,13 @@ module.exports.updateUser = async (req, res) => {
 
     if (updateUser) {
       const updatedUser = await User.findById(userId);
-
-      return res.status(200).json(updatedUser);
+      return res.status(200).json({
+        message: 'success',
+        code: 200,
+        status: getReasonPhrase(200),
+        error: false,
+        response: updatedUser,
+      });
     }
   } catch (error) {
     console.log(error);
@@ -103,12 +124,23 @@ module.exports.updateUser = async (req, res) => {
 // eslint-disable-next-line consistent-return
 module.exports.getAllUsers = async (req, res, next) => {
   try {
-    const orders = await User.find({});
-    if (!orders) {
-      return res.status(404).json({ message: 'No User Available' });
+    const users = await User.find({});
+    if (!users) {
+      return res.status(404).json({
+        message: 'No User Available',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
     }
-
-    res.status(200).json(orders);
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: users,
+    });
   } catch (err) {
     next(err);
   }

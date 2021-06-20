@@ -1,17 +1,29 @@
 /* eslint-disable consistent-return */
+const { getReasonPhrase } = require('http-status-codes');
 const Job = require('../../modal/jobs');
-
 // save new job
 module.exports.saveJob = async (req, res) => {
   const jobInfo = req.body;
 
   try {
     if (!jobInfo) {
-      return res.status(400).send('Provide valid Data');
+      return res.status(400).json({
+        message: 'Provide valid Data',
+        code: 400,
+        status: getReasonPhrase(400),
+        error: true,
+        response: null,
+      });
     }
 
     const savedJob = await Job.create(jobInfo);
-    return res.status(200).send(savedJob);
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: savedJob,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -25,10 +37,21 @@ module.exports.getAllJobs = async (req, res) => {
     const jobs = await Job.find({}).limit(parseInt(limit));
 
     if (!jobs) {
-      return res.status(404).json({ message: 'No Jobs Available' });
+      return res.status(404).json({
+        message: 'No Jobs Available',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
     }
-
-    res.status(200).json(jobs);
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: jobs,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -42,10 +65,21 @@ module.exports.jobsByUser = async (req, res) => {
   try {
     const jobs = await Job.find({ jobPosterId: id });
     if (!jobs) {
-      return res.status(404).json({ message: 'No Jobs Available' });
+      return res.status(404).json({
+        message: 'No Jobs Available',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
     }
-
-    res.status(200).json(jobs);
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: jobs,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -65,7 +99,13 @@ module.exports.UpdateJob = async (req, res, next) => {
 
       if (updateJob) {
         const updatedJob = await Job.findById({ _id: id });
-        res.status(200).json(updatedJob);
+        return res.status(200).json({
+          message: 'success',
+          code: 200,
+          status: getReasonPhrase(200),
+          error: false,
+          response: updatedJob,
+        });
       }
     }
   } catch (err) {
@@ -79,10 +119,21 @@ module.exports.singleJob = async (req, res, next) => {
   try {
     const job = await Job.findById(id);
     if (!job) {
-      return res.status(200).json({ message: 'Sorry No job Found' });
+      return res.status(404).json({
+        message: 'Sorry No Job Found',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
     }
-
-    res.status(200).json(job);
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: job,
+    });
   } catch (err) {
     next(err);
   }
@@ -95,10 +146,22 @@ module.exports.deleteJob = async (req, res, next) => {
     const deletedJob = await Job.findByIdAndRemove(id);
 
     if (!deletedJob) {
-      return res.status(200).json({ message: 'Sorry No Job Found' });
+      return res.status(404).json({
+        message: 'Sorry No Job Found',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
     }
 
-    res.status(200).json(deletedJob);
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: deletedJob,
+    });
   } catch (err) {
     next(err);
   }
