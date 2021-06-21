@@ -58,6 +58,34 @@ module.exports.getAllJobs = async (req, res) => {
   }
 };
 
+//  jobs by tag
+module.exports.JobsByTag = async (req, res) => {
+  const { limit, tag } = req.params;
+  try {
+    // eslint-disable-next-line radix
+    const jobs = await Job.find({ tag }).limit(parseInt(limit));
+
+    if (!jobs) {
+      return res.status(404).json({
+        message: 'No Jobs Available',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
+    }
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: jobs,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
 // jobs by user
 module.exports.jobsByUser = async (req, res) => {
   const { id } = req.params;
