@@ -19,7 +19,7 @@ router.get('/limit/:limit', getAllJobs);
 router.get('/tag/:tag/:limit', JobsByTag);
 router.get('/single/:id', singleJob);
 router.get('/byUser/:id', jobsByUser);
-// router.put('/:id', UpdateJob);
+router.put('/:id', UpdateJob);
 router.post('/', jobValidator, jobValidationHandler, saveJob);
 // router.delete('/:id', deleteJob);
 

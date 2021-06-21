@@ -34,7 +34,7 @@ module.exports.getAllJobs = async (req, res) => {
   const { limit } = req.params;
   try {
     // eslint-disable-next-line radix
-    const jobs = await Job.find({}).limit(parseInt(limit));
+    const jobs = await Job.find({}).limit(parseInt(limit)).sort({ createdAt: -1 });
 
     if (!jobs) {
       return res.status(404).json({
