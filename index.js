@@ -19,4 +19,4 @@ app.use('/api', apiRoutes);
 app.use(errorHandler);
 
 // app Start
-app.listen(process.env.PORT || 5100, () => console.log('Server On Fire 5100'));
+app.listen(process.env.PORT || 5100, () => console.log('>Server On Fire 5100'));

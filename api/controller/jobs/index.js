@@ -93,8 +93,8 @@ module.exports.jobsByUser = async (req, res, next) => {
 
   console.log(id);
   try {
-    // const jobs = await Job.find({ jobPosterId: id });
-    const jobs = await Job.find();
+    const jobs = await Job.find({ jobPosterId: id });
+    // const jobs = await Job.find();
 
     if (!jobs) {
       return res.status(404).json({
@@ -226,4 +226,8 @@ module.exports.job = async (req, res) => {
     console.log(err);
     // next(err);
   }
+};
+
+module.exports.singleJobById = async (req, res) => {
+  res.send(req.params);
 };
