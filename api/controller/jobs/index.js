@@ -86,12 +86,16 @@ module.exports.JobsByTag = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
 // jobs by user
-module.exports.jobsByUser = async (req, res) => {
+module.exports.jobsByUser = async (req, res, next) => {
   const { id } = req.params;
 
+  console.log(id);
   try {
-    const jobs = await Job.find({ jobPosterId: id });
+    // const jobs = await Job.find({ jobPosterId: id });
+    const jobs = await Job.find();
+
     if (!jobs) {
       return res.status(404).json({
         message: 'No Jobs Available',
@@ -110,7 +114,7 @@ module.exports.jobsByUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    next(err);
   }
 };
 
@@ -192,5 +196,34 @@ module.exports.deleteJob = async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+module.exports.job = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const jobs = await Job.find({ jobPosterId: id });
+    // const jobs = await Job.find();
+    console.log(jobs.length);
+    if (!jobs) {
+      return res.status(404).json({
+        message: 'No Jobs Available',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
+    }
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: jobs,
+    });
+  } catch (err) {
+    console.log(err);
+    // next(err);
   }
 };

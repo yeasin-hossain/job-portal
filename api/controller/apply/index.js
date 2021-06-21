@@ -135,7 +135,6 @@ module.exports.deleteApply = async (req, res, next) => {
 };
 module.exports.applyByUser = async (req, res, next) => {
   const { id } = req.params;
-
   try {
     const apply = await Apply.find({ applicantId: id });
     if (!apply) {
@@ -147,7 +146,6 @@ module.exports.applyByUser = async (req, res, next) => {
         response: null,
       });
     }
-
     return res.status(200).json({
       message: 'success',
       code: 200,

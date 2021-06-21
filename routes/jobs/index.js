@@ -7,12 +7,14 @@ const {
   deleteJob,
   jobsByUser,
   JobsByTag,
+  job,
 } = require('../../api/controller/jobs');
 const { jobValidator, jobValidationHandler } = require('../../middelwares/job');
 
 const router = express.Router();
 
 router.get('/:limit', getAllJobs);
+router.get('/job/:id', job);
 router.get('/:tag/:limit', JobsByTag);
 router.get('/single/:id', singleJob);
 router.get('/user/:id', jobsByUser);
