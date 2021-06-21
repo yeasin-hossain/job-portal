@@ -4,7 +4,7 @@ const Job = require('../../modal/jobs');
 // save new job
 module.exports.saveJob = async (req, res) => {
   const jobInfo = req.body;
-
+  console.log(jobInfo);
   try {
     if (!jobInfo) {
       return res.status(400).json({

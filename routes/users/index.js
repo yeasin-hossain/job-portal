@@ -13,6 +13,6 @@ const router = express.Router();
 router.get('/', Auth, getAllUsers);
 router.put('/:userId', Auth, updateUser);
 router.post('/login', loginValidator, addUserValidationHandler, login);
-router.post('/resister', registerValidator, addUserValidationHandler, register);
+router.post('/register', registerValidator, addUserValidationHandler, register);
 
 module.exports = router;

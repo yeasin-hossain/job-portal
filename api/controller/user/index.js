@@ -30,7 +30,7 @@ module.exports.login = async (req, res) => {
       });
     }
 
-    const { name, role, createdAt, companyName, paid, _id } = singUser;
+    const { name, role, createdAt, companyName, paid, _id, service, postLimit } = singUser;
     const payload = {
       email,
       name,
@@ -39,6 +39,8 @@ module.exports.login = async (req, res) => {
       companyName,
       paid,
       id: _id,
+      service,
+      postLimit,
     };
 
     // Create Jwt Token
@@ -70,7 +72,7 @@ module.exports.register = async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    const { email, name, role, createdAt, companyName, paid, _id } = savedUser;
+    const { email, name, role, createdAt, companyName, paid, _id, service, postLimit } = savedUser;
     const payload = {
       email,
       name,
@@ -79,6 +81,8 @@ module.exports.register = async (req, res) => {
       companyName,
       paid,
       id: _id,
+      service,
+      postLimit,
     };
 
     // Create Jwt Token
@@ -101,18 +105,34 @@ module.exports.register = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   const { userId } = req.params;
   const user = req.body;
-
   try {
     const updateUser = await User.findOneAndUpdate({ _id: userId }, user);
 
     if (updateUser) {
       const updatedUser = await User.findById(userId);
+      const { email, name, role, createdAt, companyName, paid, _id, service, postLimit } =
+        updatedUser;
+      const payload = {
+        email,
+        name,
+        role,
+        createdAt,
+        companyName,
+        paid,
+        id: _id,
+        service,
+        postLimit,
+      };
+      // Create Jwt Token
+      const token = await jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: '1day',
+      });
       return res.status(200).json({
         message: 'success',
         code: 200,
         status: getReasonPhrase(200),
         error: false,
-        response: updatedUser,
+        response: { ...payload, token },
       });
     }
   } catch (error) {

@@ -20,9 +20,15 @@ const peopleSchema = mongoose.Schema(
     companyName: {
       type: String,
     },
-    package: {
+    service: {
       type: String,
       enum: ['basic', 'standard', 'premium'],
+    },
+    cardType: {
+      type: String,
+    },
+    postLimit: {
+      type: Number,
     },
     paid: {
       type: Boolean,

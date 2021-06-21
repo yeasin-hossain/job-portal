@@ -15,7 +15,7 @@ const applySchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    contact: {
+    phone: {
       type: String,
       required: true,
     },
