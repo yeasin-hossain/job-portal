@@ -7,11 +7,11 @@ const {
   updateApply,
   applyByUser,
 } = require('../../api/controller/apply');
-const { applyValidator } = require('../../middelwares/apply');
+// const { applyValidator, applyValidationHandler } = require('../../middelwares/apply');
 
 const router = express.Router();
 
-router.get('/', applyValidator, allApply);
+router.get('/', allApply);
 router.post('/', saveApply);
 router.get('/:id', singleApply);
 router.get('/user/:id', applyByUser);
