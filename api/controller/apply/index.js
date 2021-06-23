@@ -157,3 +157,28 @@ module.exports.applyByUser = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.applyByPoster = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const apply = await Apply.find({ jobPosterId: id });
+    if (!apply) {
+      return res.status(404).json({
+        message: 'Sorry No Apply Found',
+        code: 404,
+        status: getReasonPhrase(404),
+        error: true,
+        response: null,
+      });
+    }
+    return res.status(200).json({
+      message: 'success',
+      code: 200,
+      status: getReasonPhrase(200),
+      error: false,
+      response: apply,
+    });
+  } catch (err) {
+    next(err);
+  }
+};

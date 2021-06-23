@@ -6,6 +6,10 @@ const applySchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    jobPosterId: {
+      type: String,
+      required: true,
+    },
     jobId: {
       type: String,
       required: true,

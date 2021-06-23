@@ -10,6 +10,7 @@ const {
   job,
   singleJobById,
 } = require('../../api/controller/jobs');
+const Auth = require('../../middelwares/auth');
 const { jobValidator, jobValidationHandler } = require('../../middelwares/job');
 
 const router = express.Router();
@@ -19,9 +20,9 @@ router.get('/limit/:limit', getAllJobs);
 router.get('/tag/:tag/:limit', JobsByTag);
 router.get('/single/:id', singleJob);
 router.get('/byUser/:id', jobsByUser);
-router.put('/:id', UpdateJob);
-router.post('/', jobValidator, jobValidationHandler, saveJob);
-// router.delete('/:id', deleteJob);
+router.put('/:id', Auth, UpdateJob);
+router.post('/', Auth, jobValidator, jobValidationHandler, saveJob);
+router.delete('/:id', Auth, deleteJob);
 
 router.get('/singleJobById/:jobId', singleJobById);
 
